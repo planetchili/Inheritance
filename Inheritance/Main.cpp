@@ -82,6 +82,12 @@ public:
 			std::cout << GetName() << " tried to use super smash on " << target.GetName() << ", but he didn't have enough goddamn sp.\n";
 		}
 	}
+	void Smash( Smasher& target )
+	{
+		Smasher::Smash( target );
+		std::cout << GetName() << " recovers 2 sp.\n";
+		sp += 2;
+	}
 private:
 	int sp = 6;
 };
@@ -89,14 +95,17 @@ private:
 int main()
 {
 	Smasher df( 100,30,"Dik Fuk" );
-	EliteSmasher tb( 110,33,"Cunt Destroyer" );;
+	EliteSmasher tb( 110,13,"Cunt Destroyer" );;
 
 	df.Smash( tb );
-	tb.SuperSmash( df );
+
 	tb.SuperSmash( df );
 	tb.SuperSmash( df );
 	tb.SuperSmash( df );
 	tb.Smash( df );
+	tb.Smash( df );
+	tb.SuperSmash( df );
+	tb.SuperSmash( df );
 
 	std::cin.get();
 	return 0;
