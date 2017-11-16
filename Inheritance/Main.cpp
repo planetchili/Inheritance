@@ -64,7 +64,7 @@ public:
 	{}
 	void SuperSmash( Smasher& target )
 	{
-		if( sp > 0 )
+		if( sp >= 3 )
 		{
 			if( target.IsDead() )
 			{
