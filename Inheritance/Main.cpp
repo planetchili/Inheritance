@@ -1,32 +1,75 @@
 #include <iostream>
 #include <string>
 
-class A
+class Smasher
 {
 public:
-	void FuncX()
+	Smasher()
+		:
+		Smasher( 69,1,"McDefault" )
 	{}
-private:
-	int var1;
-};
+	Smasher( int hp,int str,const std::string& name )
+		:
+		hp( hp ),
+		str( str ),
+		name( name )
+	{}
+	int GetStr() const
+	{
+		return str;
+	}
+	int GetHP() const
+	{
+		return hp;
+	}
+	const std::string& GetName() const
+	{
+		return name;
+	}
+	void Smash( Smasher& target ) const
+	{
+		if( target.IsDead() )
+		{
+			std::cout << name << " smashes " << target.GetName() << "'s dead body. Still dead.\n";
+		}
+		else
+		{
+			std::cout << name << " smashes " << target.GetName() << ".\n";
+			target.TakeDamage( GetStr() );
+		}
+	}
+	void TakeDamage( int damage )
+	{
+		std::cout << name << " takes " << damage << " damage.\n";
+		hp -= damage;
 
-// use ": public Parent" to inherit from another class
-class B : public A
-{
-public:
-	void FuncY()
-	{}
+		if( IsDead() )
+		{
+			std::cout << name << " dies.\n";
+		}
+	}
+	bool IsDead() const
+	{
+		return hp <= 0;
+	}
+
 private:
-	float var2;
+	int hp;
+	int str;
+	std::string name;
 };
 
 int main()
 {
-	A mya;
-	B myb;
+	Smasher df( 100,30,"Dik Fuk" );
+	Smasher tb( 120,35,"Tor Bjorn" );
 
-	std::cout << sizeof( mya ) << std::endl;
-	std::cout << sizeof( myb ) << std::endl;
+	df.Smash( tb );
+	tb.Smash( df );
+	tb.Smash( df );
+	tb.Smash( df );
+	tb.Smash( df );
+	tb.Smash( df );
 
 	std::cin.get();
 	return 0;
