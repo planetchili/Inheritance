@@ -53,6 +53,10 @@ public:
 			hp += recovery;
 		}
 	}
+	virtual void SpecialMove( MemeFighter& )
+	{
+		std::cout << "You will never get this!" << std::endl;
+	}
 protected:
 	MemeFighter( const std::string& name,int hp,int speed,int power )
 		:
@@ -92,7 +96,7 @@ public:
 		:
 		MemeFighter( name,69,7,14 )
 	{}
-	void SpecialMove( MemeFighter& other ) const
+	void SpecialMove( MemeFighter& other ) override
 	{
 		if( IsAlive() && other.IsAlive() )
 		{
@@ -125,7 +129,7 @@ public:
 		:
 		MemeFighter( name,80,4,10 )
 	{}
-	void SpecialMove()
+	void SpecialMove( MemeFighter& ) override
 	{
 		if( IsAlive() )
 		{
@@ -160,6 +164,21 @@ void Engage( MemeFighter& f1,MemeFighter& f2 )
 	p2->Punch( *p1 );
 }
 
+void DoSpecials( MemeFighter& f1,MemeFighter& f2 )
+{
+	// pointers for sorting purposes
+	auto* p1 = &f1;
+	auto* p2 = &f2;
+	// determine attack order
+	if( p1->GetInitiative() < p2->GetInitiative() )
+	{
+		std::swap( p1,p2 );
+	}
+	// execute attacks
+	p1->SpecialMove( *p2 );
+	p2->SpecialMove( *p1 );
+}
+
 int main()
 {
 	MemeFrog f1( "Dat Boi" );
@@ -170,8 +189,7 @@ int main()
 		// trade blows
 		Engage( f1,f2 );
 		// special moves
-		f2.SpecialMove();
-		f1.SpecialMove( f2 );
+		DoSpecials( f1,f2 );
 		// end of turn maintainence
 		f1.Tick();
 		f2.Tick();
