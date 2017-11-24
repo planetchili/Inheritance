@@ -55,7 +55,7 @@ public:
 		}
 	}
 	virtual void SpecialMove( MemeFighter& ) = 0;
-
+	virtual ~MemeFighter() = default;
 protected:
 	MemeFighter( const std::string& name,int hp,int speed,int power )
 		:
@@ -119,6 +119,10 @@ public:
 			MemeFighter::Tick();
 		}
 	}
+	~MemeFrog()
+	{
+		std::cout << "Destroying MemeFrog '" << name << "'!" << std::endl;
+	}
 };
 
 class MemeStoner : public MemeFighter
@@ -145,6 +149,10 @@ public:
 				std::cout << GetName() << " spaces out." << std::endl;
 			}
 		}
+	}
+	~MemeStoner()
+	{
+		std::cout << "Destroying MemeStoner '" << name << "'!" << std::endl;
 	}
 };
 
@@ -230,7 +238,6 @@ int main()
 	{
 		std::cout << "Team ONE is victorious!" << std::endl;
 	}
-	while( !_kbhit() );
 
 	for( size_t i = 0; i < t1.size(); i++ )
 	{
@@ -238,5 +245,6 @@ int main()
 		delete t2[i];
 	}
 
+	while( !_kbhit() );
 	return 0;
 }
