@@ -45,7 +45,7 @@ public:
 			ApplyDamageTo( other,power + Roll( 2 ) );
 		}
 	}
-	void Tick()
+	virtual void Tick()
 	{
 		if( IsAlive() )
 		{
@@ -110,7 +110,7 @@ public:
 			}
 		}
 	}
-	void Tick()
+	void Tick() override
 	{
 		if( IsAlive() )
 		{
