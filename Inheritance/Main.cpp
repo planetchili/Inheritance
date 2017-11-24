@@ -55,6 +55,7 @@ public:
 		}
 	}
 	virtual void SpecialMove( MemeFighter& ) = 0;
+
 protected:
 	MemeFighter( const std::string& name,int hp,int speed,int power )
 		:
@@ -179,16 +180,16 @@ void DoSpecials( MemeFighter& f1,MemeFighter& f2 )
 
 int main()
 {
-	MemeFrog f1( "Dat Boi" );
-	MemeStoner f2( "Good Guy Greg" );
-	MemeFrog f3( "the WB Frog" );
-	
-	MemeStoner g1( "Chong" );
-	MemeStoner g2( "Scumbag Steve" );
-	MemeFrog g3( "Pepe" );
-
-	std::vector<MemeFighter*> t1 = { &f1,&f2,&f3 };
-	std::vector<MemeFighter*> t2 = { &g1,&g2,&g3 };
+	std::vector<MemeFighter*> t1 = {
+		new MemeFrog( "Dat Boi" ),
+		new MemeStoner( "Good Guy Greg" ),
+		new MemeFrog( "the WB Frog" )
+	};
+	std::vector<MemeFighter*> t2 = {
+		new MemeStoner( "Chong" ),
+		new MemeStoner( "Scumbag Steve" ),
+		new MemeFrog( "Pepe" )
+	};
 
 	const auto alive_pred = []( MemeFighter* pf ) { return pf->IsAlive(); };
 	while(
@@ -230,5 +231,12 @@ int main()
 		std::cout << "Team ONE is victorious!" << std::endl;
 	}
 	while( !_kbhit() );
+
+	for( size_t i = 0; i < t1.size(); i++ )
+	{
+		delete t1[i];
+		delete t2[i];
+	}
+
 	return 0;
 }
