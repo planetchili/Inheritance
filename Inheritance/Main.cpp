@@ -99,6 +99,14 @@ public:
 		pWeapon = nullptr;
 		return pWep;
 	}
+	bool HasWeapon() const
+	{
+		return pWeapon != nullptr;
+	}
+	const Weapon& GetWeapon() const
+	{
+		return *pWeapon;
+	}
 protected:
 	MemeFighter( const std::string& name,int hp,int speed,int power,Weapon* pWeapon = nullptr )
 		:
@@ -236,6 +244,19 @@ public:
 	}
 };
 
+void TakeWeaponIfDead( MemeFighter& taker,MemeFighter& giver )
+{
+	if( taker.IsAlive() && !giver.IsAlive() && giver.HasWeapon() )
+	{
+		if( giver.GetWeapon().GetRank() > taker.GetWeapon().GetRank() )
+		{
+			std::cout << taker.GetName() << " takes the " << giver.GetWeapon().GetName()
+				<< " from " << giver.GetName() << "'s still-cooling corpse." << std::endl;
+			taker.GiveWeapon( giver.PilferWeapon() );
+		}
+	}
+}
+
 void Engage( MemeFighter& f1,MemeFighter& f2 )
 {
 	// pointers for sorting purposes
@@ -248,7 +269,9 @@ void Engage( MemeFighter& f1,MemeFighter& f2 )
 	}
 	// execute attacks
 	p1->Attack( *p2 );
+	TakeWeaponIfDead( *p1,*p2 );
 	p2->Attack( *p1 );
+	TakeWeaponIfDead( *p2,*p1 );
 }
 
 void DoSpecials( MemeFighter& f1,MemeFighter& f2 )
@@ -263,7 +286,9 @@ void DoSpecials( MemeFighter& f1,MemeFighter& f2 )
 	}
 	// execute attacks
 	p1->SpecialMove( *p2 );
+	TakeWeaponIfDead( *p1,*p2 );
 	p2->SpecialMove( *p1 );
+	TakeWeaponIfDead( *p2,*p1 );
 }
 
 int main()
@@ -316,7 +341,7 @@ int main()
 	}
 	else
 	{
-		std::cout << "Team ONE is victorious!" << std::endl;
+		std::cout << "Team TWO is victorious!" << std::endl;
 	}
 
 	for( size_t i = 0; i < t1.size(); i++ )
