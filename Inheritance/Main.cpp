@@ -213,37 +213,6 @@ public:
 	}
 };
 
-class MemeStoner : public MemeFighter
-{
-public:
-	MemeStoner( const std::string& name,Weapon* pWeapon = nullptr )
-		:
-		MemeFighter( name,80,4,10,pWeapon )
-	{}
-	void SpecialMove( MemeFighter& ) override
-	{
-		if( IsAlive() )
-		{
-			if( Roll() > 3 )
-			{
-				std::cout << GetName() << " smokes the dank sticky icky, becoming " << "Super " << GetName() << std::endl;
-				name = "Super " + name;
-				attr.speed += 3;
-				attr.power = (attr.power * 69) / 42;
-				attr.hp += 10;
-			}
-			else
-			{
-				std::cout << GetName() << " spaces out." << std::endl;
-			}
-		}
-	}
-	~MemeStoner() override
-	{
-		std::cout << "Destroying MemeStoner '" << name << "'!" << std::endl;
-	}
-};
-
 class MemeCat : public MemeFighter
 {
 public:
@@ -269,6 +238,49 @@ public:
 	~MemeCat() override
 	{
 		std::cout << "Destroying MemeCat '" << name << "'!" << std::endl;
+	}
+};
+
+class MemeStoner : public MemeFighter
+{
+public:
+	MemeStoner( const std::string& name,Weapon* pWeapon = nullptr )
+		:
+		MemeFighter( name,80,4,10,pWeapon )
+	{}
+	void SpecialMove( MemeFighter& other ) override
+	{
+		if( IsAlive() )
+		{
+			if( Roll() > 3 )
+			{
+				if( MemeFrog* pFrog = dynamic_cast<MemeFrog*>(&other) )
+				{
+					std::cout << GetName() + " says: 'Oh sweet dude, it's a cool little froggie bro.'\n";
+				}
+				else if( MemeStoner* pStoner = dynamic_cast<MemeStoner*>(&other) )
+				{
+					std::cout << GetName() + " says: 'Duuuuuude.'\n";
+				}
+				else if( MemeCat* pCat = dynamic_cast<MemeCat*>(&other) )
+				{
+					std::cout << GetName() + " says: 'Hey kitty bro, can I pet you?'\n";
+				}
+				std::cout << GetName() << " smokes the dank sticky icky, becoming " << "Super " << GetName() << std::endl;
+				name = "Super " + name;
+				attr.speed += 3;
+				attr.power = (attr.power * 69) / 42;
+				attr.hp += 10;
+			}
+			else
+			{
+				std::cout << GetName() << " spaces out." << std::endl;
+			}
+		}
+	}
+	~MemeStoner() override
+	{
+		std::cout << "Destroying MemeStoner '" << name << "'!" << std::endl;
 	}
 };
 
