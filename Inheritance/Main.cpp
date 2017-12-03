@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <random>
 #include <algorithm>
+#include <typeinfo>
 
 class Dice
 {
@@ -207,6 +208,10 @@ public:
 			MemeFighter::Tick();
 		}
 	}
+	void Foo()
+	{
+		std::cout << "Non-virtual MemeFrog function call." << std::endl;
+	}
 	~MemeFrog() override
 	{
 		std::cout << "Destroying MemeFrog '" << name << "'!" << std::endl;
@@ -254,15 +259,15 @@ public:
 		{
 			if( Roll() > 3 )
 			{
-				if( MemeFrog* pFrog = dynamic_cast<MemeFrog*>(&other) )
+				if( typeid(MemeFrog) == typeid(other) )
 				{
 					std::cout << GetName() + " says: 'Oh sweet dude, it's a cool little froggie bro.'\n";
 				}
-				else if( MemeStoner* pStoner = dynamic_cast<MemeStoner*>(&other) )
+				else if( typeid(MemeStoner) == typeid(other) )
 				{
 					std::cout << GetName() + " says: 'Duuuuuude.'\n";
 				}
-				else if( MemeCat* pCat = dynamic_cast<MemeCat*>(&other) )
+				else if( typeid(MemeCat) == typeid(other) )
 				{
 					std::cout << GetName() + " says: 'Hey kitty bro, can I pet you?'\n";
 				}
@@ -332,6 +337,15 @@ void DoSpecials( MemeFighter& f1,MemeFighter& f2 )
 	TakeWeaponIfDead( *p2,*p1 );
 }
 
+bool AreSameType( MemeFighter& f1,MemeFighter& f2 )
+{
+	if( typeid(f1) == typeid(f2) )
+	{
+		return true;
+	}
+	return false;
+}
+
 int main()
 {
 	std::vector<MemeFighter*> t1 = {
@@ -344,6 +358,10 @@ int main()
 		new MemeStoner( "Scumbag Steve",new Bat ),
 		new MemeFrog( "Pepe",new Knife )
 	};
+
+	std::cout << std::boolalpha << AreSameType( *t1[0],*t2[2] ) << std::endl;
+	std::cout << std::boolalpha << AreSameType( *t1[0],*t2[0] ) << std::endl;
+	std::cout << typeid(*t2[1]).name() << std::endl;
 
 	const auto alive_pred = []( MemeFighter* pf ) { return pf->IsAlive(); };
 	while(
