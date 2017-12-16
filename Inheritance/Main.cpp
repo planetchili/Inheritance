@@ -45,6 +45,7 @@ public:
 		return rank;
 	}
 	virtual int CalculateDamage( const Attributes& attr,Dice& d ) const = 0;
+	virtual ~Weapon() = default;
 private:
 	std::string name;
 	int rank;
