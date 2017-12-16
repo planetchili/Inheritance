@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <random>
 #include <algorithm>
+#include <memory>
 
 class Dice
 {
@@ -85,20 +86,13 @@ public:
 		}
 	}
 	virtual void SpecialMove( MemeFighter& ) = 0;
-	virtual ~MemeFighter()
+	void GiveWeapon( std::unique_ptr<Weapon> pNewWeapon )
 	{
-		delete pWeapon;
+		pWeapon = std::move( pNewWeapon );
 	}
-	void GiveWeapon( Weapon* pNewWeapon )
+	std::unique_ptr<Weapon> PilferWeapon()
 	{
-		delete pWeapon;
-		pWeapon = pNewWeapon;
-	}
-	Weapon* PilferWeapon()
-	{
-		auto pWep = pWeapon;
-		pWeapon = nullptr;
-		return pWep;
+		return std::move( pWeapon );
 	}
 	bool HasWeapon() const
 	{
@@ -134,7 +128,7 @@ protected:
 	Attributes attr;
 	std::string name;
 private:
-	Weapon* pWeapon = nullptr;
+	std::unique_ptr<Weapon> pWeapon;
 	mutable Dice d;
 };
 
@@ -294,18 +288,17 @@ void DoSpecials( MemeFighter& f1,MemeFighter& f2 )
 
 int main()
 {
-	std::vector<MemeFighter*> t1 = {
-		new MemeFrog( "Dat Boi",new Fists ),
-		new MemeStoner( "Good Guy Greg",new Bat ),
-		new MemeFrog( "the WB Frog",new Knife )
-	};
-	std::vector<MemeFighter*> t2 = {
-		new MemeStoner( "Chong",new Fists ),
-		new MemeStoner( "Scumbag Steve",new Bat ),
-		new MemeFrog( "Pepe",new Knife )
-	};
+	std::vector<std::unique_ptr<MemeFighter>> t1;
+	t1.push_back( std::make_unique<MemeFrog>( "Dat Boi",new Fists ) );
+	t1.push_back( std::make_unique<MemeStoner>( "Good Guy Greg",new Bat ) );
+	t1.push_back( std::make_unique<MemeFrog>( "the WB Frog",new Knife ) );
 
-	const auto alive_pred = []( MemeFighter* pf ) { return pf->IsAlive(); };
+	std::vector<std::unique_ptr<MemeFighter>> t2;
+	t2.push_back( std::make_unique<MemeStoner>( "Chong",new Fists ) );
+	t2.push_back( std::make_unique<MemeStoner>( "Scumbag Steve",new Bat ) );
+	t2.push_back( std::make_unique<MemeFrog>( "Pepe",new Knife ) );
+
+	const auto alive_pred = []( const std::unique_ptr<MemeFighter>& pf ) { return pf->IsAlive(); };
 	while(
 		std::any_of( t1.begin(),t1.end(),alive_pred ) &&
 		std::any_of( t2.begin(),t2.end(),alive_pred ) )
@@ -343,12 +336,6 @@ int main()
 	else
 	{
 		std::cout << "Team TWO is victorious!" << std::endl;
-	}
-
-	for( size_t i = 0; i < t1.size(); i++ )
-	{
-		delete t1[i];
-		delete t2[i];
 	}
 
 	while( !_kbhit() );
