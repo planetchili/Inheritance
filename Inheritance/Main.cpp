@@ -102,6 +102,7 @@ public:
 	{
 		return *pWeapon;
 	}
+	virtual ~MemeFighter() = default;
 protected:
 	MemeFighter( const std::string& name,int hp,int speed,int power,std::unique_ptr<Weapon> pWeapon )
 		:
