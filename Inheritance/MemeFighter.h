@@ -46,11 +46,11 @@ public:
 		}
 	}
 	virtual void SpecialMove( MemeFighter& ) = 0;
-	void GiveWeapon( std::unique_ptr<Weapon> pNewWeapon )
+	void GiveWeapon( std::shared_ptr<Weapon> pNewWeapon )
 	{
 		pWeapon = std::move( pNewWeapon );
 	}
-	std::unique_ptr<Weapon> PilferWeapon()
+	std::shared_ptr<Weapon> PilferWeapon()
 	{
 		return std::move( pWeapon );
 	}
@@ -64,7 +64,7 @@ public:
 	}
 	virtual ~MemeFighter() = default;
 protected:
-	MemeFighter( const std::string& name,int hp,int speed,int power,std::unique_ptr<Weapon> pWeapon )
+	MemeFighter( const std::string& name,int hp,int speed,int power,std::shared_ptr<Weapon> pWeapon )
 		:
 		name( name ),
 		attr( { hp,speed,power } ),
@@ -89,7 +89,7 @@ protected:
 	Attributes attr;
 	std::string name;
 private:
-	std::unique_ptr<Weapon> pWeapon;
+	std::shared_ptr<Weapon> pWeapon;
 	mutable Dice d;
 };
 

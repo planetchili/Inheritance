@@ -4,7 +4,7 @@
 class MemeFrog : public MemeFighter
 {
 public:
-	MemeFrog( const std::string& name,std::unique_ptr<Weapon> pWeapon )
+	MemeFrog( const std::string& name,std::shared_ptr<Weapon> pWeapon )
 		:
 		MemeFighter( name,69,7,14,std::move( pWeapon ) )
 	{}
