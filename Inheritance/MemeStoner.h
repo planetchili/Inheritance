@@ -5,9 +5,9 @@
 class MemeStoner : public MemeFighter
 {
 public:
-	MemeStoner( const std::string& name,std::shared_ptr<Weapon> pWeapon )
+	MemeStoner( const std::string& name,std::shared_ptr<Dice> dice,std::shared_ptr<Weapon> pWeapon )
 		:
-		MemeFighter( name,80,4,10,std::move( pWeapon ) )
+		MemeFighter( name,80,4,10,std::move( dice ),std::move( pWeapon ) )
 	{}
 	void SpecialMove( MemeFighter& ) override
 	{

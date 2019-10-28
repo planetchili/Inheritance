@@ -15,16 +15,17 @@ int main()
 	auto fists = std::make_shared<Fists>();
 	auto bat = std::make_shared<Bat>();
 	auto knife = std::make_shared<Knife>();
+	auto dice = std::make_shared<Dice>();
 
 	std::vector<std::unique_ptr<MemeFighter>> t1;
-	t1.push_back( std::make_unique<MemeFrog>( "Dat Boi",fists ) );
-	t1.push_back( std::make_unique<MemeStoner>( "Good Guy Greg",bat ) );
-	t1.push_back( std::make_unique<MemeFrog>( "the WB Frog",knife ) );
+	t1.push_back( std::make_unique<MemeFrog>( "Dat Boi",dice,fists ) );
+	t1.push_back( std::make_unique<MemeStoner>( "Good Guy Greg",dice,bat ) );
+	t1.push_back( std::make_unique<MemeFrog>( "the WB Frog",dice,knife ) );
 
 	std::vector<std::unique_ptr<MemeFighter>> t2;
-	t2.push_back( std::make_unique<MemeStoner>( "Chong",std::move( fists ) ) );
-	t2.push_back( std::make_unique<MemeStoner>( "Scumbag Steve",std::move( bat ) ) );
-	t2.push_back( std::make_unique<MemeFrog>( "Pepe",std::move( knife ) ) );
+	t2.push_back( std::make_unique<MemeStoner>( "Chong",dice,std::move( fists ) ) );
+	t2.push_back( std::make_unique<MemeStoner>( "Scumbag Steve",dice,std::move( bat ) ) );
+	t2.push_back( std::make_unique<MemeFrog>( "Pepe",std::move( dice ),std::move( knife ) ) );
 
 	const auto alive_pred = []( const std::unique_ptr<MemeFighter>& pf ) { return pf->IsAlive(); };
 	while(

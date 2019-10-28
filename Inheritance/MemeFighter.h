@@ -33,7 +33,7 @@ public:
 		{
 			std::cout << name << " attacks " << other.GetName() << " with his " << pWeapon->GetName()
 				<< "!" << std::endl;
-			ApplyDamageTo( other,pWeapon->CalculateDamage( attr,d ) );
+			ApplyDamageTo( other,pWeapon->CalculateDamage( attr,*d ) );
 		}
 	}
 	virtual void Tick()
@@ -64,11 +64,12 @@ public:
 	}
 	virtual ~MemeFighter() = default;
 protected:
-	MemeFighter( const std::string& name,int hp,int speed,int power,std::shared_ptr<Weapon> pWeapon )
+	MemeFighter( const std::string& name,int hp,int speed,int power,std::shared_ptr<Dice> dice,std::shared_ptr<Weapon> pWeapon )
 		:
 		name( name ),
 		attr( { hp,speed,power } ),
-		pWeapon( std::move( pWeapon ) )
+		pWeapon( std::move( pWeapon ) ),
+		d( std::move( dice ) )
 	{
 		std::cout << name << " enters the ring!" << std::endl;
 	}
@@ -83,14 +84,14 @@ protected:
 	}
 	int Roll( int nDice = 1 ) const
 	{
-		return d.Roll( nDice );
+		return d->Roll( nDice );
 	}
 protected:
 	Attributes attr;
 	std::string name;
 private:
 	std::shared_ptr<Weapon> pWeapon;
-	mutable Dice d;
+	std::shared_ptr<Dice> d;
 };
 
 void TakeWeaponIfDead( MemeFighter& taker,MemeFighter& giver )
